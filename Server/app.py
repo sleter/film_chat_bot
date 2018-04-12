@@ -1,6 +1,8 @@
 from flask import Flask, url_for, request, json, Response, jsonify
+from Server.ChangeJS import Change
 
 data = None
+change = Change()
 app = Flask(__name__)
 
 @app.route('/')
@@ -48,9 +50,12 @@ def api_do():
     global data
     data = request.get_json(force=True)
     js = json.dumps(data)
-    #modify JSON here
-    print(js)
-    return jsonify(js)
+    #TUTAJ BOT #
+    #change = Change()
+    new_js = change.respond(js)
+    print(new_js)
+
+    return jsonify(new_js)
 
 #-----------------------------------------------------
 

@@ -1,28 +1,28 @@
-from rasa_nlu.training_data import load_data
-from rasa_nlu.config import RasaNLUConfig
-from rasa_nlu.model import Trainer
-from rasa_nlu.model import Interpreter
+
+from rasa_nlu.rasa_nlu.training_data import load_data
+from rasa_nlu.rasa_nlu.model import Trainer
+from rasa_nlu.rasa_nlu.model import Interpreter
+from rasa_nlu.rasa_nlu.config import load
 from Server.Bot import Bot
-from rasa_nlu.components import ComponentBuilder
+
 
 
 class Rasa_NLU(object):
 
 
     def __init__(self):
-        self.data_training = "./testData.json"
+        self.data_training = "testData.json"
         self.Bot = Bot()
         self.training_nlu()
 
 
     def training_nlu(self):
         training_data = load_data(self.data_training)
-        config = RasaNLUConfig("./config.json")
+        config = load("config_spacy.yml")
         trainer = Trainer(config)
         trainer.train(training_data)
-        model_directory = trainer.persist("./projects")
-        builder = ComponentBuilder(use_cache=True)
-        self.interpreter = Interpreter.load(model_directory, config, builder)
+        model_directory = trainer.persist("projects")
+        self.interpreter = Interpreter.load(model_directory)
 
 
     def parse_message(self, message):

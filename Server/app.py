@@ -50,8 +50,6 @@ def api_do():
     global data
     data = request.get_json(force=True)
     js = json.dumps(data)
-    #TUTAJ BOT #
-    #change = Change()
     new_js = change.respond(js)
     print(new_js)
 

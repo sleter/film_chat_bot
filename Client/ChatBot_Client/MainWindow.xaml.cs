@@ -21,30 +21,37 @@ namespace ChatBot_Client
     /// </summary>
     public partial class MainWindow : Window
     {
-        readonly ObservableCollection<string> messages = new ObservableCollection<string>();
+        readonly ObservableCollection<Message> _messages = new ObservableCollection<Message>();
 
         public MainWindow()
         {
-            DataContext = messages;
+            DataContext = _messages;
             InitializeComponent();
+            _messages.Add(new Message(){MessageText = "Hello",Sended = "No"});
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Text != String.Empty)
+            if (MessageBox.Text != string.Empty)
             {
-                messages.Add($"You: {MessageBox.Text}");
-                MessageBox.Text = String.Empty;
+                AddToMessages(new Message() { MessageText = MessageBox.Text, Sended = "False" });
             }
         }
 
         private void MainWindow_OnKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter && MessageBox.Text != String.Empty)
+            if (e.Key == Key.Enter && MessageBox.Text != string.Empty)
             {
-                messages.Add($"You: {MessageBox.Text}");
-                MessageBox.Text = String.Empty;
+                AddToMessages(new Message() { MessageText = MessageBox.Text, Sended = "True" });
             }
+        }
+
+        private void AddToMessages(Message message)
+        {
+            _messages.Add(message);
+            MessageBox.Text = string.Empty;
+            int lastMessageIndex = MessagesListBox.Items.Count - 1;
+            MessagesListBox.ScrollIntoView(MessagesListBox.Items[lastMessageIndex]);
         }
     }
 }

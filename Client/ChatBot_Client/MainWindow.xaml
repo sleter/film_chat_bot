@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChatBot_Client"
         mc:Ignorable="d"
-        Title="ChatBot" Height="550" Width="300"
+        Title="ChatBot" Height="550" Width="350"
         KeyDown="MainWindow_OnKeyDown">
     <Window.Resources>
         <Style TargetType="StackPanel" x:Key="StackPanelStyle">
@@ -24,8 +24,40 @@
                     <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" Content="{TemplateBinding Content}">
                     </ContentPresenter>
                 </Border>
-            </Grid> 
+            </Grid>
         </ControlTemplate>
+        <DataTemplate x:Key="MessageTemplate" DataType="local:Message">
+            <Border CornerRadius="8">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Background" Value="LightGray"/>
+                        <Setter Property="Padding" Value="10,5"/>
+                        <Setter Property="HorizontalAlignment" Value="Left"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=Sended}" Value="True">
+                                <Setter Property="Background" Value="DodgerBlue"/>
+                                <Setter Property="HorizontalAlignment" Value="Right"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <TextBlock 
+                    Text="{Binding Path=MessageText}">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextWrapping" Value="Wrap"/>
+                            <Setter Property="MaxWidth" Value="220"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=Sended}" Value="True">
+                                    <Setter Property="Foreground" Value="White"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Border>
+        </DataTemplate>
     </Window.Resources>
     <DockPanel LastChildFill="True">
         <StackPanel DockPanel.Dock="Bottom" Style="{StaticResource StackPanelStyle}">
@@ -46,15 +78,15 @@
                     >Send
                     <Button.Style>
                         <Style TargetType="Button">
-                            <Setter Property="Background" Value="DeepSkyBlue"></Setter>
+                            <Setter Property="Background" Value="DeepSkyBlue"/>
                             <Style.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="DodgerBlue"></Setter>
+                                    <Setter Property="Background" Value="DodgerBlue"/>
                                 </Trigger>
-                            </Style.Triggers> 
+                            </Style.Triggers>
                         </Style>
                     </Button.Style>
-                    </Button>
+                </Button>
                 <Border 
                     Padding="0" 
                     BorderThickness="3" 
@@ -75,16 +107,21 @@
                         Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Border}, Path=Height}"
                         VerticalContentAlignment="Center"
                         FontSize="20"
-                        Background="Transparent"
-                        >
+                        Background="Transparent">
                     </TextBox>
                 </Border>
             </DockPanel>
         </StackPanel>
         <Grid Style="{StaticResource GridStyle}">
             <Border Padding="3" BorderBrush="DeepSkyBlue" BorderThickness="3" CornerRadius="7">
-                <ListView BorderBrush="Transparent" ItemsSource="{Binding}">
-                </ListView>
+                <ListBox                    
+                    ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                    x:Name="MessagesListBox"
+                    BorderBrush="Transparent" 
+                    ItemsSource="{Binding}"
+                    ItemTemplate="{StaticResource MessageTemplate}"
+                    HorizontalContentAlignment="Stretch">
+                </ListBox>
             </Border>
         </Grid>
     </DockPanel>
